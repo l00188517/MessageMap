@@ -19,5 +19,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          organization: <your_organization>
-          projectKey: <your_project_key>
+          organization: Mathieu
+          projectKey: l00188517

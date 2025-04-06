@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Message Map - About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .space {
+            margin: 70px;
+        }
+
+        .bottom-nav {
+            background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a.active {
+            color: #fff;
+        }
+
+        .bottom-nav .material-icons {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        h2 {
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>About: Message Map</h1>
+
+    <div class="container">
+        <h2>Welcome to Message Map!</h2>
+        <p>
+            Message Map is a simple web application that allows users to post messages tied to their current location. 
+            These messages are then displayed on a map, making it easy to see what people are saying around you.
+        </p>
+        <p>
+            <strong>Features:</strong>
+        </p>
+        <ul>
+            <li>Post messages with your name and current location.</li>
+            <li>View messages posted by other users on an interactive map.</li>
+            <li>Search for messages by name or content.</li>
+            <li>Like, comment, and share messages.</li>
+            <li>Edit and delete your own messages.</li>
+            <li>View the number of times a message has been opened.</li>
+            <li>Install the app as a Progressive Web App (PWA) for an enhanced experience.</li>
+        </ul>
+        <p>
+            <strong>How to Use:</strong>
+        </p>
+        <ul>
+            <li>Enter your name and message in the provided fields.</li>
+            <li>Click the "Post Message" button to add your message to the map.</li>
+            <li>Use the search bar to filter messages.</li>
+            <li>Click on markers on the map to view message details and interactions.</li>
+        </ul>
+        <p>
+            This app utilizes geolocation to accurately place messages and is designed to be accessible and user-friendly. 
+            We hope you enjoy using Message Map to connect with others and share your thoughts!
+        </p>
+        <p>
+            <strong>Author:</strong> Mathieu Bizumuremyi<br>
+            <strong>Version:</strong> 1.0<br>
+            <strong>Email:</strong> binemathieu@gmail.com<br>
+        </p>
+    </div>
+    <div class="space"></div>
+
+    <div class="bottom-nav">
+        <a href="index.html">
+            <span class="material-icons">location_on</span>
+            <span>Location</span>
+        </a>
+        <a href="#" class="active">
+            <span class="material-icons">lightbulb</span>
+            <span>About</span>
+        </a>
+        <a href="#" id="updateButton">
+            <span class="material-icons">settings</span>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('updateButton').addEventListener('click', () => {
+            
+            // Clear localStorage 'savedMessages'
+            localStorage.removeItem('savedMessages');
+
+            // Clear service worker cache
+            if ('caches' in window) {
+                caches.keys().then(function(cacheNames) {
+                    cacheNames.forEach(function(cacheName) {
+                        caches.delete(cacheName);
+                    });
+                }).then(function() {
+                    console.log('Cache cleared successfully.');
+                    alert('Cache cleared successfully. Reloading page.');
+                    window.location.reload();
+                }).catch(function(error) {
+                    console.error('Error clearing cache:', error);
+                    alert('Error clearing cache. Please try again.');
+                });
+            } else {
+                console.log('Caches API not supported in this browser.');
+                alert('Cache clearing not supported in this browser.');
+            }
+        });
+    </script>
+</body>
+</html>

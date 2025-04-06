@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Message Map - Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .space {
+            margin: 70px;
+        }
+
+        .bottom-nav {
+            background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a.active {
+            color: #fff;
+        }
+
+        .bottom-nav .material-icons {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        h2 {
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Settings</h1>
+
+    <div class="container">
+        <h2>Disclaimer</h2>
+        <p>
+            <strong>Accuracy and Reliability:</strong> While we strive to provide accurate location-based messaging, we cannot guarantee the accuracy or reliability of the location data or the content of user-generated messages. The use of geolocation services may not always be precise, and message content reflects the opinions of individual users, not necessarily the views of the app developers.
+        </p>
+        <p>
+            <strong>User Responsibility:</strong> Users are solely responsible for the content they post. We do not endorse or take responsibility for any user-generated content, including its accuracy, legality, or appropriateness. Users should exercise caution and discretion when sharing personal information or interacting with other users.
+        </p>
+        <p>
+            <strong>No Liability:</strong> In no event shall the developers of Message Map be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of the use or inability to use this app. This includes, but is not limited to, damages for errors, omissions, interruptions, defects, delays, computer viruses, loss of data, or any other loss.
+        </p>
+        <p>
+            <strong>Privacy:</strong> We take user privacy seriously. By using this app, you acknowledge and agree to our privacy policy, which outlines how we collect, use, and protect your information. We collect and process user-provided input and geolocation data to enable the core functionality of this app. Please review our privacy policy for more details.
+        </p>
+        <p>
+            <strong>Changes and Updates:</strong> We reserve the right to modify or discontinue this app, or any portion thereof, at any time without notice. We may also update these terms and conditions from time to time, and your continued use of the app constitutes acceptance of any changes.
+        </p>
+        <p>
+            <strong>Use at Your Own Risk:</strong> Use of this app is at your own risk. The app is provided "as is" and "as available" without warranties of any kind, either express or implied.
+        </p>
+        <hr>
+        <p>
+            <strong>Author:</strong> Mathieu Bizumuremyi<br>
+            <strong>Version:</strong> 1.0<br>
+            <strong>Email:</strong> binemathieu@gmail.com<br>
+        </p>
+    </div>
+    <div class="space"></div>
+
+    <div class="bottom-nav">
+        <a href="index.html">
+            <span class="material-icons">location_on</span>
+            <span>Location</span>
+        </a>
+        <a href="about.html">
+            <span class="material-icons">lightbulb</span>
+            <span>About</span>
+        </a>
+        <a href="#" id="updateButton"  class="active">
+            <span class="material-icons">settings</span>
+            <span>Settings</span>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('updateButton').addEventListener('click', () => {
+            // Clear localStorage 'savedMessages'
+            localStorage.removeItem('savedMessages');
+
+            // Clear service worker cache
+            if ('caches' in window) {
+                caches.keys().then(function(cacheNames) {
+                    cacheNames.forEach(function(cacheName) {
+                        caches.delete(cacheName);
+                    });
+                }).then(function() {
+                    console.log('Cache cleared successfully.');
+                    alert('Cache cleared successfully. Reloading page.');
+                    window.location.reload();
+                }).catch(function(error) {
+                    console.error('Error clearing cache:', error);
+                    alert('Error clearing cache. Please try again.');
+                });
+            } else {
+                console.log('Caches API not supported in this browser.');
+                alert('Cache clearing not supported in this browser.');
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').then(registration => {
+                     if (registration.active) {
+                         // Force a refresh from the server
+                         registration.update();
+                     }
+                 });
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    console.log(registrations);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

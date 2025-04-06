@@ -179,6 +179,12 @@
     <input type="text" id="nameInput" placeholder="Enter your name"><br>
     <br>
     <textarea id="messageInput" placeholder="Enter your message"></textarea><br>
+    <p>
+        <strong>Location Offset:</strong>
+        <label>
+            <input type="checkbox" id="locationOffset" checked>
+        </label>
+    </p>
     <button id="postButton">Post Message</button>
     <button id="clearButton">Clear Messages</button>
     <br>
@@ -210,8 +216,20 @@
         let messages = [];
         let userMarker;
         let deferredPrompt;
+        const locationOffsetCheckbox = document.getElementById('locationOffset');
 
         
+        locationOffsetCheckbox.addEventListener('change', () => {
+            if (locationOffsetCheckbox.checked) {
+                localStorage.setItem('locationOffsetEnabled', 'true');
+            } else {
+                localStorage.setItem('locationOffsetEnabled', 'false');
+            }
+        });
+
+        if (localStorage.getItem('locationOffsetEnabled') === 'false') {
+            locationOffsetCheckbox.checked = false;
+        }
 
         function initMap() {
             map = L.map('map').setView([0, 0], 2);
@@ -251,19 +269,22 @@
             let duplicate = true;
             const timestamp = new Date().toLocaleString();
 
-            for (let i = 0; i < 10 && duplicate; i++) {
-                duplicate = false;
-                const randomAngle = Math.random() * 2 * Math.PI;
-                newLat = lat + offset * Math.sin(randomAngle);
-                newLng = lng + offset * Math.cos(randomAngle);
+            if(localStorage.getItem('locationOffsetEnabled') === 'true'){
+                for (let i = 0; i < 10 && duplicate; i++) {
+                    duplicate = false;
+                    const randomAngle = Math.random() * 2 * Math.PI;
+                    newLat = lat + offset * Math.sin(randomAngle);
+                    newLng = lng + offset * Math.cos(randomAngle);
 
-                for (const message of messages) {
-                    if (Math.abs(message.lat - newLat) < 0.00001 && Math.abs(message.lng - newLng) < 0.00001) {
-                        duplicate = true;
-                        break;
+                    for (const message of messages) {
+                        if (Math.abs(message.lat - newLat) < 0.00001 && Math.abs(message.lng - newLng) < 0.00001) {
+                            duplicate = true;
+                            break;
+                        }
                     }
                 }
             }
+            
 
             messages.push({ text: text, lat: newLat, lng: newLng, name: name, timestamp: timestamp, likes: 0, comments: [], openCount: 0 }); // Initialize openCount to 0
         }

@@ -3,20 +3,21 @@ name: SonarCloud Scan
 on:
   push:
     branches:
-      - main  # Or your default branch
+      - main
 
 jobs:
   sonarcloud:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for full history
-
+          fetch-depth: 0
       - name: SonarCloud Scan
-        uses: sonarcloud/scan@v2
+        uses: sonarsource/sonarcloud-github-action@v2 # or latest version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Or use a personal access token with repo scope
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          organization: <your_organization>
+          projectKey: <your_project_key>

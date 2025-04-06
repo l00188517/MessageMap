@@ -510,9 +510,11 @@
                      if (registration.active) {
                          // Force a refresh from the server
                          registration.update();
-                         console.log(registrations);
                      }
                  });
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    console.log(registrations);
+                });
              }
              initMap();
         };

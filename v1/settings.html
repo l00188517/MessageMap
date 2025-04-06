@@ -73,7 +73,39 @@
         }
 
         h2 {
-          text-align: center;
+            text-align: center;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .popup-button {
+            background-color: #ff6e7f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -92,7 +124,7 @@
             <strong>No Liability:</strong> In no event shall the developers of Message Map be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of the use or inability to use this app. This includes, but is not limited to, damages for errors, omissions, interruptions, defects, delays, computer viruses, loss of data, or any other loss.
         </p>
         <p>
-            <strong>Privacy:</strong> We take user privacy seriously. By using this app, you acknowledge and agree to our privacy policy, which outlines how we collect, use, and protect your information. We collect and process user-provided input and geolocation data to enable the core functionality of this app. Please review our <a href="privacy.html">privacy policy</a> for more details.
+            <strong>Privacy:</strong> We collect and process user-provided input and geolocation data to enable the core functionality of this app. Please review our <a href="#">privacy policy</a> for more details.
         </p>
         <p>
             <strong>Changes and Updates:</strong> We reserve the right to modify or discontinue this app, or any portion thereof, at any time without notice. We may also update these terms and conditions from time to time, and your continued use of the app constitutes acceptance of any changes.
@@ -118,18 +150,27 @@
             <span class="material-icons">lightbulb</span>
             <span>About</span>
         </a>
-        <a href="#" id="updateButton"  class="active">
+        <a href="#" id="updateButton" class="active">
             <span class="material-icons">settings</span>
             <span>Settings</span>
         </a>
     </div>
 
+    <div class="popup-overlay" id="popup">
+        <div class="popup-content">
+            <p id="popup-message"></p>
+            <button class="popup-button" id="closePopup">OK</button>
+        </div>
+    </div>
+
     <script>
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popup-message');
+        const closePopup = document.getElementById('closePopup');
+
         document.getElementById('updateButton').addEventListener('click', () => {
-            // Clear localStorage 'savedMessages'
             localStorage.removeItem('savedMessages');
 
-            // Clear service worker cache
             if ('caches' in window) {
                 caches.keys().then(function(cacheNames) {
                     cacheNames.forEach(function(cacheName) {
@@ -137,26 +178,34 @@
                     });
                 }).then(function() {
                     console.log('Cache cleared successfully.');
-                    alert('Cache cleared successfully. Reloading page.');
-                    window.location.reload();
+                    popupMessage.textContent = 'Cache cleared successfully. Reloading page.';
+                    popup.style.display = 'flex';
                 }).catch(function(error) {
                     console.error('Error clearing cache:', error);
-                    alert('Error clearing cache. Please try again.');
+                    popupMessage.textContent = 'Error clearing cache. Please try again.';
+                    popup.style.display = 'flex';
                 });
             } else {
                 console.log('Caches API not supported in this browser.');
-                alert('Cache clearing not supported in this browser.');
+                popupMessage.textContent = 'Cache clearing not supported in this browser.';
+                popup.style.display = 'flex';
+            }
+        });
+
+        closePopup.addEventListener('click', () => {
+            popup.style.display = 'none';
+            if (popupMessage.textContent.includes('successfully')) {
+                window.location.reload();
             }
         });
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js').then(registration => {
-                     if (registration.active) {
-                         // Force a refresh from the server
-                         registration.update();
-                     }
-                 });
+                    if (registration.active) {
+                        registration.update();
+                    }
+                });
                 navigator.serviceWorker.getRegistrations().then(registrations => {
                     console.log(registrations);
                 });

@@ -79,7 +79,7 @@ The `manifest.json` file contains the necessary information for the PWA:
   ]
 }
 ```
-## Service Worker1
+## Service Worker
 The `service-worker.js` file handles caching and offline functionality.
 
 ## Contributing

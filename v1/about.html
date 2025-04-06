@@ -135,8 +135,13 @@
     </div>
 
     <script>
+        let deferredPrompt; // Variable to store the beforeinstallprompt event
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.prompt(); // Show the install prompt
+            console.log('beforeinstallprompt fired');
+        });
         document.getElementById('updateButton').addEventListener('click', () => {
-            
             // Clear localStorage 'savedMessages'
             localStorage.removeItem('savedMessages');
 

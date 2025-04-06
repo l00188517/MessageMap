@@ -1,0 +1,22 @@
+name: SonarCloud Scan
+
+on:
+  push:
+    branches:
+      - main  # Or your default branch
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required for full history
+
+      - name: SonarCloud Scan
+        uses: sonarcloud/scan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Or use a personal access token with repo scope
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

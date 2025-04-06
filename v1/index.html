@@ -174,15 +174,18 @@
     </style>
 </head>
 <body>
-    <h1>Message Map: V1.0</h1>
+    <h1>Message Map</h1>
     <button id="installButton" style="display: none;">Install App</button>
     <br>
     <input type="text" id="nameInput" placeholder="Enter your name"><br>
     <br>
     <textarea id="messageInput" placeholder="Enter your message"></textarea><br>
+    <hr>
     <button id="postButton">Post Message</button>
     <button id="clearButton">Clear Messages</button>
+    <hr>
     <button id="showLocationButton">Show My Location</button>
+    <hr>
     <input type="text" id="searchFilter" placeholder="Search by name or message">
     <div id="map"></div>
     <div id="messageList"></div>
@@ -197,7 +200,7 @@
             <span class="material-icons">lightbulb</span>
             <span>About</span>
         </a>
-        <a href="#" id="updateButton">
+        <a href="settings.html">
             <span class="material-icons">settings</span>
             <span>Settings</span>
         </a>
@@ -433,31 +436,6 @@
             }
         }
         
-        document.getElementById('updateButton').addEventListener('click', () => {
-            messages = [];
-            // Clear localStorage 'savedMessages'
-            localStorage.removeItem('savedMessages');
-
-            // Clear service worker cache
-            if ('caches' in window) {
-                caches.keys().then(function(cacheNames) {
-                    cacheNames.forEach(function(cacheName) {
-                        caches.delete(cacheName);
-                    });
-                }).then(function() {
-                    console.log('Cache cleared successfully.');
-                    alert('Cache cleared successfully. Reloading page.');
-                    window.location.reload();
-                }).catch(function(error) {
-                    console.error('Error clearing cache:', error);
-                    alert('Error clearing cache. Please try again.');
-                });
-            } else {
-                console.log('Caches API not supported in this browser.');
-                alert('Cache clearing not supported in this browser.');
-            }
-        });
-
         document.getElementById('postButton').addEventListener('click', postMessage);
         document.getElementById('clearButton').addEventListener('click', () => {
             messages = [];
